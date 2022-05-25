@@ -50,7 +50,6 @@ def load(filename:str, order:str=None) -> dict:
 
     # Create empty lists for saving parameters
     names = []
-    orients = np.array([]).reshape((0, 4))
     offsets = np.array([]).reshape((0, 3))
     parents = np.array([], dtype=int)
 
@@ -64,7 +63,6 @@ def load(filename:str, order:str=None) -> dict:
         if rmatch:
             names.append(rmatch.group(1))
             offsets = np.append(offsets, np.array([[0, 0, 0]]), axis=0)
-            orients = np.append(orients, np.array([[1, 0, 0, 0]]), axis=0)
             parents = np.append(parents, active)
             active = (len(parents) - 1)
             continue
@@ -100,7 +98,6 @@ def load(filename:str, order:str=None) -> dict:
         if jmatch:
             names.append(jmatch.group(1))
             offsets = np.append(offsets, np.array([[0, 0, 0]]), axis=0)
-            orients = np.append(orients, np.array([[1, 0, 0, 0]]), axis=0)
             parents = np.append(parents, active)
             active = (len(parents) - 1)
             continue
@@ -113,7 +110,7 @@ def load(filename:str, order:str=None) -> dict:
         if fmatch:
             fnum = int(fmatch.group(1))
             positions = offsets[np.newaxis].repeat(fnum, axis=0)
-            rotations = np.zeros((fnum, len(orients), 3))
+            rotations = np.zeros((fnum, len(offsets), 3))
             continue
 
         fmatch = re.match("\s*Frame Time:\s+([\d\.]+)", line)
