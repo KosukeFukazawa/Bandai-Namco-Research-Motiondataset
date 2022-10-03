@@ -33,11 +33,11 @@ def load(filename:str, order:str=None) -> dict:
     
     Returns:
         dict: A dictionary containing the following keys:
-            * names (list): The names of the joints.
-            * parents (list): The parent indices.
-            * offsets (np.ndarray): The offsets of the joints.
-            * rotations (np.ndarray): The rotations(euler angle) of the joints.
-            * positions (np.ndarray): The positions of the joints.
+            * names (list)(jnum): The names of the joints.
+            * parents (list)(jnum): The parent indices.
+            * offsets (np.ndarray)(jnum, 3): The offsets of the joints.
+            * rotations (np.ndarray)(fnum, jnum, 3) : The local coordinates of rotations of the joints. 
+            * positions (np.ndarray)(fnum, jnum, 3) : The positions of the joints.
             * order (str): The order of the channels.
             * frametime (float): The time between two frames.
     """
@@ -109,7 +109,7 @@ def load(filename:str, order:str=None) -> dict:
         fmatch = re.match("\s*Frames:\s+(\d+)", line)
         if fmatch:
             fnum = int(fmatch.group(1))
-            positions = offsets[np.newaxis].repeat(fnum, axis=0)
+            positions = offsets[None].repeat(fnum, axis=0)
             rotations = np.zeros((fnum, len(offsets), 3))
             continue
 
